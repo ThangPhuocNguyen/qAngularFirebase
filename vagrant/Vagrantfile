@@ -1,0 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = "demoBox"
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+
+  config.vm.provider :virtualbox do |vb|
+    vb.name = "qAngularFirebase"
+    vb.customize ["modifyvm", :id, "--memory", "2048"]
+  end
+
+  config.vm.network "forwarded_port", guest: 8000, host: 8000
+  config.vm.network "forwarded_port", guest: 8003, host: 8003
+  config.vm.network "forwarded_port", guest: 9018, host: 9018
+  config.vm.network "forwarded_port", guest: 9019, host: 9019
+  config.vm.network "forwarded_port", guest: 9000, host: 9000
+  config.vm.network "forwarded_port", guest: 35729, host: 35729
+
+  config.vm.synced_folder "../app", "/home/vagrant/app"
+
+  config.vm.provision "shell", :path => "bootstrap.sh", :privileged => false
+
+end
